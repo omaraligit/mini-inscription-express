@@ -1,0 +1,61 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+    .alert.alert-info
+      b
+        | changer le lien du serveur 
+        i -
+        |  pour pointer sur le server Express
+  h1 Inscription des membres
+  hr
+  form(@submit='checkForm')
+    .row
+      .col-sm-12.col-md-6
+        .form-group
+          label(for='Nom') Nom
+          input#Nom.form-control(type='text' required='' v-model='nom' name='nom')
+        .form-group
+          label(for='Prenom') Prenom
+          input#Prenom.form-control(type='text' required='' v-model='prenom' name='prenom')
+        .form-group
+          label(for='date_de_naissance') Date de naissance
+          input#date_de_naissance.form-control.datetimepicker-input(type='text' required='' @blur='closeDateTimePicker($event)' data-toggle='datetimepicker' v-model='date_de_naissance' data-target='#date_de_naissance')
+      .col-sm-12.col-md-6
+        .form-group
+          label(for='Telephone') Telephone
+          input#Telephone.form-control(type='text' required='' v-model='telephone' name='telephone' pattern='[0]{1}[5,6,7]{1} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}' title='telephone marocain 05/06/07 xx xx xx xx')
+        .row
+          .col
+            .form-group.form-check.mb-0
+              input#Home.form-check-input(type='radio' required='' value='H' v-model='sexe' name='sexe')
+              label.form-check-label(for='Home') Home
+          .col
+            .form-group.form-check.mb-0
+              input#femme.form-check-input(type='radio' required='' value='F' v-model='sexe' name='sexe')
+              label.form-check-label(for='femme') Femme
+        hr
+        .row
+          .col
+            .form-group.form-check
+              input#Marocain.form-check-input(type='radio' checked='' value='M' v-model='pays' name='pays')
+              label.form-check-label(for='Marocain') Marocain
+          .col
+            .form-group.form-check
+              input#Etranger.form-check-input(type='radio' value='E' v-model='pays' name='pays')
+              label.form-check-label(for='Etranger') Etranger
+    button.btn.btn-primary(type='submit' v-on:click='SaveMember($event)') Submit
+    .alert.alert-success.mt-5(v-if="serverResponse!=''")
+      b(v-text='serverResponse')
+    .alert.alert-danger.mt-5(v-if="alertError!=''")
+      b(v-text='alertError')
+  hr
+  form.mt-5(@submit='checkForm')
+    input#membersfile(type='file' required='')
+    button.btn.btn-primary(type='submit',v-on:click='saveFileOfMembers($event)') Submit excel file
+    a.btn.btn-info(type='submit',href="/uploads/excel-template.xlsx") template du ficher Excel
+
+
+block javascript
+    script(src='/javascripts/form.js')
